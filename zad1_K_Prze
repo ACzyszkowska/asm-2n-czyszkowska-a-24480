@@ -1,0 +1,64 @@
+
+section .data
+    Number1 dw 8
+    Number2 dw 10
+    Number3 dw 5
+    temp    dw 1
+
+section .bass
+    Answer resw 1
+
+section .text
+    global _start
+
+_start:
+
+    mov rax, word [Number1]
+    mov rax, word [Number2]
+    mov rax, word [Number3]
+    cmp rax, rbx
+    ja  above1
+    jb  below1
+    je  egual1
+    
+ label:
+	cmp rcx, word [temp]
+	ja above2
+	jb below2
+	mov word [Answer], rcx
+	
+ below2:
+	mov rax, word [tmp]
+	mov word [Answer], rax
+	jmp label2
+
+ label2: 	
+	mov rax, 0
+	mov rbx, 0
+	mov rcx, 0
+	mov word [temp], rax
+	
+ above2:
+	mov word [Answer], rcx
+	jmp label2
+	
+	
+ below1:
+	mov word [tmp], rbx
+	jmp label
+	
+
+ above1:
+	mov word [tmp], rax
+	jmp label
+	
+ equal1:
+	mov word [tmp], rax
+	jmp label
+	
+	
+_ end:
+	mov rax, 60
+	mov rdi, 0
+	syscall 
+
