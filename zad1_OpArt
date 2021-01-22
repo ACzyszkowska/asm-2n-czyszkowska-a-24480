@@ -1,0 +1,112 @@
+;sekcja zainicjalizowanych danych
+section .data
+
+    gNum1 dq 4212
+    qNum2 dq 1275
+    qNum3 dq 987
+    qNum4 dq 125
+
+;sekcja rezerwacji pamięci 
+section .bass
+    qAns1 resq 1
+    qAns2 resq 1
+    qAns3 resq 1
+    qAns4 resq 1
+    qAns5 resq 1
+    qAns6 resq 1
+    qAns7 reso 1
+    qAns8 reso 1
+    qAns9 reso 1
+    qAns10 resq 1
+    qAns11 resq 1
+    qAns12 resq 1
+
+
+
+;program.. star
+section .text
+        global _start
+
+_start:
+/*~Ans1 = Num1 + Num2~*/
+        mov rax, qword [gNum1]
+        add rax, qword [gNum2]
+        mov qword [qAns1], rax
+
+/*~Ans2 = Num1 + Num3~*/
+        mov rax, qword [gNum1]
+        add rax, qword [gNum3]
+        mov qword [qAns2], rax
+
+/*~Ans3 = Num3 + Num4~*/
+        mov rax, qword [gNum3]
+        add rax, qword [gNum4]
+        mov qword [qAns3], rax
+
+/*~Ans4 = Num1 – Num2~*/
+        mov rax, qword [gNum1]
+        sub rax, qword [gNum2]
+        mov qword [qAns4], rax
+
+/*~Ans5 = Num1 – Num3~*/
+        mov rax, qword [gNum1]
+        add rax, qword [gNum3]
+        mov qword [qAns5], rax
+
+/*~Ans6 = Num2 – Num4~*/
+        mov rax, qword [gNum2]
+        add rax, qword [gNum4]
+        mov qword [qAns6], rax
+
+        call _mul
+        call _div
+
+/*~Zakończenie programu~*/
+_end:
+        mov rax, 60
+        mov rdi, 0
+        syscall
+
+;mnozenie        
+_mul:
+/*~Ans7 = Num1 * Num3~*/
+        mov rax, qword[qNum1]
+        mul qword [qNum3]
+        mov qword [qAns7]
+        mov qword [qAns7 + 8], rdx
+
+/*~Ans8 = Num2 * Num2~*/
+        mov rax, qword[qNum2]
+        mul qword [qNum2]
+        mov qword [qAns8]
+        mov qword [qAns8 + 8], rdx
+
+/*~Ans9 = Num2 * Num4~*/
+        mov rax, qword[qNum2]
+        mul qword [qNum4]
+        mov qword [qAns9]
+        mov qword [qAns9 + 8], rdx
+
+        ret
+
+;dzielenie
+_div:
+/*~Ans10 = Num1 / Num2~*/
+        mov rax, 0
+        mov rax, qword [qNum1]
+        div qword [qNum2]
+        mov qword [qAns10], rax
+
+/*~Ans11 = Num3 / Num4~*/
+        mov rax, 0
+        mov rax, qword [qNum3]
+        div qword [qNum4]
+        mov qword [qAns11], rax
+
+/*~Ans12 = Num1 / Num4~*/
+        mov rax, 0
+        mov rax, qword [qNum1]
+        div qword [qNum4]
+        mov qword [qAns12], rax
+
+        ret
