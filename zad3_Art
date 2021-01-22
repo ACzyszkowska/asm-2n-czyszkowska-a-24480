@@ -1,0 +1,31 @@
+section .data
+    gradeI      dq 6
+    gradeII     dq 3
+    gradeIII    dq 4
+    gradeIV     dq 5
+    
+
+section .bss
+    average resb 1 
+
+section .text
+    global _start
+;start programu, wprowadzenie 4 ocen
+_start:
+    mov rax, qword [gradeI]
+    add rax, qword [gradeII]
+    add rax, qword [gradeIII]
+    add rax, qword [gradeIV]
+    mov rbx, rax
+;dzielenie, srednia arytmetyczna
+_div:
+    mov rax, rbx
+    mov rbx, 4
+    div rbx
+    mov qword [average], rax
+    
+;zakoczenie programu
+_end:
+    mov rax, 60
+    mov rdi, 0
+    syscall
