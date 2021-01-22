@@ -1,0 +1,70 @@
+section .data 
+    msg       db  "CZEŚĆ:) Jak masz na imię?",10
+    text      db  "Nowo utworzony plik by: "
+    file_name db  "zad2_stos.txt",0
+
+section .bss
+    name    resb 12
+    fd      resb 1
+ 
+
+section .text
+    global _start
+
+;start programu, wywowanie msg
+_start:
+
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg
+    mov rdx, 25
+    syscall
+
+;uzytkownik wprowadza imie
+    mov rax, 0
+    mov rdi, 0
+    mov rsi, name
+    mov rdx, 12
+    syscall
+
+; tworzenie pliku
+    mov rax, 2
+    mov rdi, file_name
+    mov rsi, 66
+    mov rdx, 0644o
+    syscall
+
+; przechowanie dyskryptora
+    mov [fd], rax
+
+; zapisanie ciagu
+    mov rax, 1
+    mov rdi, [fd]
+    mov rsi, text
+    mov rdx, 30
+    syscall
+
+; offset - lseek
+    mov rax, 8
+    mov rdi, [fd]
+    mov rsi, 0
+    mov rdx, 1
+    syscall
+
+; dopisanie imienia
+    mov rax, 1
+    mov rdi, [fd]
+    mov rsi, name
+    mov rdx, 12
+    syscall
+
+; zamkniecie pliku
+    mov rax, 3
+    mov rdi, [fd]
+    syscall
+
+;zakonczenie programu
+_end:
+    mov rax, 60
+    mov rdi, 0
+    syscall
