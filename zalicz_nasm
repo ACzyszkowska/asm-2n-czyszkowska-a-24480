@@ -1,0 +1,89 @@
+;sekcja zainicjalizowanych danych
+section .data
+    tab1     dq      40, 160, 154, 364, 1027, 310, 1216, 991, 820, 307
+    filename db      "zaliczenie.txt", 0
+ 
+;sekcja rezerwacji pamięci 
+section .bss
+    tabdiv3 resq 10
+    tabw    resb 6
+    fd      resb 1
+
+section .text
+    global _start
+ 
+_start:
+    mov rbx, tab1  
+    mov r12, 0     
+    
+loop:              
+    mov r13, [rbx+r12]  
+    sub r13, 10         
+    push r13            
+ 
+    
+    add r12, 8          
+    cmp r12, 80 
+    jne loop
+    mov r12, 0  
+    
+loop2:
+    pop r13     
+    mov r8, 3   
+    xor rdx, rdx    
+    mov rax, r13     
+    idiv r8         
+    mov [tabdiv3+r12], rax
+        
+    
+    add r12, 8 
+    cmp r12, 10*8 
+    jne loop2       
+    mov r12, 0
+    mov r14, 0
+ 
+loop3:
+    
+    mov rax, [tabdiv3+r12]      
+    cmp rax, 255                
+    jle less_or_equal           
+    add r12, 8
+    cmp r12, 10*8
+    jne loop3
+ 
+less_or_equal:
+    mov ax, [tabdiv3+r12]
+    mov [tabw+r14], ax  
+    inc r14
+    add r12, 8
+    cmp r12, 10*8
+    jne loop3
+     
+;zapisanie do pliku   
+save:
+    mov rdi, filename
+    mov rsi, 0102o 
+    mov rdx, 0644o 
+    mov rax, 2
+    syscall
+    ;zapis do pliku
+    mov [fd], rax
+    mov rdx, 6
+    mov rsi, tabw 
+    mov rdi, [fd]
+    mov rax, 1
+    syscall
+
+   ;przechowywanie deskryptora 
+    mov rdi, [fd]
+    mov rax, 3
+    syscall
+    
+   ;koniec programu
+    _end:
+    mov rax, 60
+    mov rdi,0
+    syscall
+
+
+
